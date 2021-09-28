@@ -24,29 +24,33 @@ before_script:
   #- wget -q ${TWRP_SOURCE} -O $HOME/twrp.tar.xz
   #- tar -xJf twrp.tar.xz --directory $HOME/twrp/ && rm twrp.tar.xz 
  # From Oreo something has changed, you need more files with different compression, see logs
-  - TWRP_SOURCE1="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.aa"
-  - TWRP_SOURCE2="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ab"
-  - TWRP_SOURCE3="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ac"               
-  - wget -q ${TWRP_SOURCE1} -O ./twrp.tar.xz.aa
-  - wget -q ${TWRP_SOURCE2} -O ./twrp.tar.xz.ab
-  - wget -q ${TWRP_SOURCE3} -O ./twrp.tar.xz.ac
-  - cat twrp.tar.xz.a* > twrp.tar.xz
-  - rm twrp.tar.xz.aa && rm twrp.tar.xz.ab && rm twrp.tar.xz.ac
-  - tar -xJf twrp.tar.xz --directory $HOME/twrp/ 
-  - rm twrp.tar.xz
+  #- TWRP_SOURCE1="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.aa"
+  #- TWRP_SOURCE2="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ab"
+  #- TWRP_SOURCE3="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ac"               
+  #- wget -q ${TWRP_SOURCE1} -O ./twrp.tar.xz.aa
+  #- wget -q ${TWRP_SOURCE2} -O ./twrp.tar.xz.ab
+  #- wget -q ${TWRP_SOURCE3} -O ./twrp.tar.xz.ac
+  #- cat twrp.tar.xz.a* > twrp.tar.xz
+  #- rm twrp.tar.xz.aa && rm twrp.tar.xz.ab && rm twrp.tar.xz.ac
+  #- tar -xJf twrp.tar.xz --directory $HOME/twrp/ 
+  #- rm twrp.tar.xz
 script:
   # Replace your $$USERNAME$$, $$REPO_URL$$, $$BRAND$$, $$DEVICE$$
-  - cd $HOME/twrp/ && git clone https://github.com/gokur20/twrp_xiaomi_Mi_Play.git device/Xiaomi/Mi_Play
-  - rm -rf bootable/recovery && git clone https://github.com/omnirom/android_bootable_recovery -b android-9.0 --depth 1 bootable/recovery
-  - |
-    docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder/twrp/:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
-    chmod o+x /home/builder/twrp/
+  - cd $HOME/twrp/ 
+ # - repo init -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-10.0
+  - repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-10.0
+  - repo sync
+  - cd $HOME/twrp/ && git clone https://github.com/gokur20/twrp_xiaomi_Mi_Play.git device/Xiaomi/Mi_Play 
+  #- rm -rf bootable/recovery && git clone https://github.com/omnirom/android_bootable_recovery -b android-9.0 --depth 1 bootable/recovery
+ # - |
+  #  docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder/twrp/:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
     cd /home/builder/twrp/
+    export ALLOW_MISSING_DEPENDENCIES=true
     source build/envsetup.sh
     # Choose build flavor as "eng" or "userdebug"
     BUILD_FLAVOR="eng"
     lunch omni_Mi_Play-${BUILD_FLAVOR}
-    make -j$(nproc --all) recoveryimage
+    mka recoveryimage
     exit
     EOF
 after_success:

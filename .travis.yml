@@ -65,10 +65,10 @@ deploy:
   on:
     tags: false
     repo: gokur20/twrp_xiaomi_Mi_Play # Optional: If you want to deploy on different repository
-    branch: master # Optional: Needs to be exact as the config branch
+    branch: main # Optional: Needs to be exact as the config branch
 branches:
   only:
-    - master # Set travis builder branch(es) names
+    - main # Set travis builder branch(es) names
   except:
     - /^(?i:untagged)-.*$/
     - /^v\d+\.\d+(\.\d+)?(-\S*)?$/

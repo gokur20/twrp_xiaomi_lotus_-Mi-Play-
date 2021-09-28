@@ -18,11 +18,22 @@ before_script:
   # Uncomment & Use below line If Building for Lollipop-based Devices
   # - TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-5.1-norepo-20200222.tar.xz"
   # Use below line If Building for Marshmallow-based Devices
-  # - TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-6.0-norepo-20200222.tar.xz"
+  #- TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-6.0-norepo-20200222.tar.xz"
   # Uncomment & Use below line If Building for Nougat-based Devices
-  - TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-7.1-norepo-20200222.tar.xz"
-  - wget -q ${TWRP_SOURCE} -O $HOME/twrp.tar.xz
-  - tar -xJf twrp.tar.xz --directory $HOME/twrp/ && rm twrp.tar.xz
+  # - TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-7.1-norepo-20200222.tar.xz"
+  #- wget -q ${TWRP_SOURCE} -O $HOME/twrp.tar.xz
+  #- tar -xJf twrp.tar.xz --directory $HOME/twrp/ && rm twrp.tar.xz 
+ # From Oreo something has changed, you need more files with different compression, see logs
+  - TWRP_SOURCE1="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.aa"
+  - TWRP_SOURCE2="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ab"
+  - TWRP_SOURCE3="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ac"               
+  - wget -q ${TWRP_SOURCE1} -O ./twrp.tar.xz.aa
+  - wget -q ${TWRP_SOURCE2} -O ./twrp.tar.xz.ab
+  - wget -q ${TWRP_SOURCE3} -O ./twrp.tar.xz.ac
+  - cat twrp.tar.xz.a* > twrp.tar.xz
+  - rm twrp.tar.xz.aa && rm twrp.tar.xz.ab && rm twrp.tar.xz.ac
+  - tar -xJf twrp.tar.xz --directory $HOME/twrp/ 
+  - rm twrp.tar.xz
 script:
   # Replace your $$USERNAME$$, $$REPO_URL$$, $$BRAND$$, $$DEVICE$$
   - cd $HOME/twrp/ && git clone https://github.com/gokur20/twrp_xiaomi_Mi_Play.git device/Xiaomi/Mi_Play
@@ -57,7 +68,6 @@ deploy:
 branches:
   only:
     - master # Set travis builder branch(es) names
-    - main
   except:
     - /^(?i:untagged)-.*$/
     - /^v\d+\.\d+(\.\d+)?(-\S*)?$/

@@ -58,7 +58,8 @@ deploy:
   skip_cleanup: true
   provider: releases
   # The secret api_key will be loaded from the environment variables
-  api_key: $GitOAUTHToken
+  #api_key: $GitOAUTHToken api_key deprecated, now use token
+  token: $GitOAUTHToken
   file_glob: true
   file: $HOME/twrp/*.img
   on:

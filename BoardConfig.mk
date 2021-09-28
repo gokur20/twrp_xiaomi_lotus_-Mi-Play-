@@ -26,7 +26,7 @@ BOARD_CHARGER_SHOW_PERCENTAGE := true
 RECOVERY_SDCARD_ON_DATA := true               # Optional: If /sdcard partition is emulated on /data partition 
 
 # TWRP stuff
-ALLOW_MISSING_DEPENDENCIES := true            # to compatibility from Android 8.1
+#ALLOW_MISSING_DEPENDENCIES := true            # to compatibility from Android 8.1
 TW_EXCLUDE_SUPERSU := true                    # true/false: Add SuperSU or not
 TW_INCLUDE_CRYPTO := true                     # true/false: Add Data Encryption Support or not
 TW_INPUT_BLACKLIST := "hbtp_vm"               # Optional: Disables virtual mouse

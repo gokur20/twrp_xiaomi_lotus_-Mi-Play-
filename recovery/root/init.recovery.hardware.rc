@@ -1,0 +1,17 @@
+on boot
+    # Always start adbd on userdebug and eng builds
+    # Please remove follow comment in debug mode.
+    # mount ext4 /dev/block/bootdevice/by-name/system /system wait ro barrier=1
+    # write /config/usb_gadget/g1/UDC a800000.dwc3
+    # start adbd
+    write sys/devices/platform/11016000.i2c5/i2c-5/5-0034/mt6370_pmu_charger/kpdpwr_reset 0
+
+on property:ro.mtk_emmc_support=1
+    # Support A/B feature for emmc boot region
+    symlink /dev/block/mmcblk0boot0 /dev/block/platform/bootdevice/by-name/preloader_a
+    symlink /dev/block/mmcblk0boot1 /dev/block/platform/bootdevice/by-name/preloader_b
+
+on property:ro.mtk_ufs_booting=1
+    # Support A/B feature for ufs boot region
+    symlink /dev/block/sda /dev/block/platform/bootdevice/by-name/preloader_a
+    symlink /dev/block/sdb /dev/block/platform/bootdevice/by-name/preloader_b

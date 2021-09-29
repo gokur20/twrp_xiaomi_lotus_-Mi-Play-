@@ -14,6 +14,11 @@ before_install:
   - docker pull fr3akyphantom/droid-builder:latest
 before_script:
   - cd $HOME && mkdir twrp
+# install repo
+  - mkdir -p ~/.bin
+  - PATH="${HOME}/.bin:${PATH}"
+  - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
+  - chmod a+rx ~/.bin/repo
   # download the TWRP Compressed Source Files from PhantomZone54's Release
   # Uncomment & Use below line If Building for Lollipop-based Devices
   # - TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-5.1-norepo-20200222.tar.xz"
@@ -24,32 +29,27 @@ before_script:
   #- wget -q ${TWRP_SOURCE} -O $HOME/twrp.tar.xz
   #- tar -xJf twrp.tar.xz --directory $HOME/twrp/ && rm twrp.tar.xz 
  # From Oreo something has changed, you need more files with different compression, see logs
-  - TWRP_SOURCE1="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.aa"
-  - TWRP_SOURCE2="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ab"
-  - TWRP_SOURCE3="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ac"               
-  - wget -q ${TWRP_SOURCE1} -O ./twrp.tar.xz.aa
-  - wget -q ${TWRP_SOURCE2} -O ./twrp.tar.xz.ab
-  - wget -q ${TWRP_SOURCE3} -O ./twrp.tar.xz.ac
-  - cat twrp.tar.xz.a* > twrp.tar.xz
-  - rm twrp.tar.xz.aa && rm twrp.tar.xz.ab && rm twrp.tar.xz.ac
-  - tar -xJf twrp.tar.xz --directory $HOME/twrp/ 
-  - rm twrp.tar.xz
+  #- TWRP_SOURCE1="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.aa"
+  #- TWRP_SOURCE2="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ab"
+  #- TWRP_SOURCE3="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ac"               
+  #- wget -q ${TWRP_SOURCE1} -O ./twrp.tar.xz.aa
+  #- wget -q ${TWRP_SOURCE2} -O ./twrp.tar.xz.ab
+  #- wget -q ${TWRP_SOURCE3} -O ./twrp.tar.xz.ac
+  #- cat twrp.tar.xz.a* > twrp.tar.xz
+  #- rm twrp.tar.xz.aa && rm twrp.tar.xz.ab && rm twrp.tar.xz.ac
+  #- tar -xJf twrp.tar.xz --directory $HOME/twrp/ 
+  #- rm twrp.tar.xz
 script:
   # Replace your $$USERNAME$$, $$REPO_URL$$, $$BRAND$$, $$DEVICE$$
-  - cd $HOME/twrp/ && git clone https://github.com/gokur20/twrp_xiaomi_Mi_Play.git device/Xiaomi/Mi_Play
-  - git clone https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-8.1
-  - rm -rf bootable/recovery && git clone https://github.com/omnirom/android_bootable_recovery -b android-9.0 --depth 1 bootable/recovery
-  - |
-    docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder/twrp/:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
-    cd /home/builder/twrp/
-    source build/envsetup.sh
-    # Choose build flavor as "eng" or "userdebug"
-    BUILD_FLAVOR="eng"
-    lunch omni_Mi_Play-${BUILD_FLAVOR}
-    make -j$(nproc --all) recoveryimage
-    exit
-    EOF
-after_success:
+  - cd $HOME/twrp/ 
+ # - repo init -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-8.1
+  - repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-8.1
+  - repo sync
+  - cd $HOME/twrp/ && git clone https://github.com/gokur20/twrp_xiaomi_Mi_Play.git device/Xiaomi/Mi_Play 
+  - cd $HOME/twrp/   
+  - . build/envsetup.sh
+  - lunch omni_Mi_Play-eng
+  - make -j$(nproc --all) recoveryimage
   - export version=$(cat bootable/recovery/variables.h | grep "define TW_MAIN_VERSION_STR" | cut -d '"' -f2)
   - cp $HOME/twrp/out/target/product/Mi_Play/recovery.img $HOME/twrp/TWRP-$version-Mi_Play-$(date +"%Y%m%d")-Unofficial.img
   - cd $HOME/twrp/

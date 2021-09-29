@@ -49,7 +49,7 @@ script:
   - cd $HOME/twrp/   
   - . build/envsetup.sh
   - lunch omni_Mi_Play-eng
-  - make -j$(nproc --all) recoveryimage
+  - make recoveryimage
   - export version=$(cat bootable/recovery/variables.h | grep "define TW_MAIN_VERSION_STR" | cut -d '"' -f2)
   - cp $HOME/twrp/out/target/product/Mi_Play/recovery.img $HOME/twrp/TWRP-$version-Mi_Play-$(date +"%Y%m%d")-Unofficial.img
   - cd $HOME/twrp/

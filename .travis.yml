@@ -1,5 +1,5 @@
 os: linux
-dist: bionic
+dist: focal
 language: generic
 sudo: required
 git:
@@ -19,6 +19,11 @@ before_script:
   - PATH="${HOME}/.bin:${PATH}"
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
   - chmod a+rx ~/.bin/repo
+# install other necessary 
+  - sudo apt-get install -y git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
+  - pip3 install twrpdtgen
+  - sudo apt install cpio
+  - sudo apt-get install openjdk-8-jdk
   # download the TWRP Compressed Source Files from PhantomZone54's Release
   # Uncomment & Use below line If Building for Lollipop-based Devices
   # - TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-5.1-norepo-20200222.tar.xz"
@@ -40,21 +45,24 @@ before_script:
   #- tar -xJf twrp.tar.xz --directory $HOME/twrp/ 
   #- rm twrp.tar.xz
 script:
-  # Replace your $$USERNAME$$, $$REPO_URL$$, $$BRAND$$, $$DEVICE$$
-  - cd $HOME/twrp/ 
- # - repo init -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-8.1
+# if you have compiling problem try to uncomment  
+#  - export LC_ALL=C  
+# Replace your $$USERNAME$$, $$REPO_URL$$, $$BRAND$$, $$DEVICE$$
+  - cd $HOME/twrp/
+  - python3 -m twrpdtgen recovery.img
   - repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-8.1
   - repo sync
-  - cd $HOME/twrp/ && git clone https://github.com/gokur20/twrp_xiaomi_Mi_Play.git device/Xiaomi/Mi_Play 
+  - cd $HOME/twrp/ && git clone https://github.com/gokur20/twrp_xiaomi_Mi_Play.git device/xiaomi/lotus 
   - cd $HOME/twrp/   
   - . build/envsetup.sh
-  - lunch omni_Mi_Play-eng
-  - make recoveryimage
+  - lunch omni_lotus-eng
+  - mka recoveryimage
+after_success:
   - export version=$(cat bootable/recovery/variables.h | grep "define TW_MAIN_VERSION_STR" | cut -d '"' -f2)
-  - cp $HOME/twrp/out/target/product/Mi_Play/recovery.img $HOME/twrp/TWRP-$version-Mi_Play-$(date +"%Y%m%d")-Unofficial.img
+  - cp $HOME/twrp/out/target/product/lotus/recovery.img $HOME/twrp/TWRP-$version-lotus-$(date +"%Y%m%d")-Unofficial.img
   - cd $HOME/twrp/
   # Optional: You might need to switch from https://transfer.sh to https://file.io
-  # - curl -s --upload-file TWRP-$version-Mi_Play-$(date +"%Y%m%d")-Unofficial.img https://transfer.sh/ && echo ""
+  # - curl -s --upload-file TWRP-$version-lotus-$(date +"%Y%m%d")-Unofficial.img https://transfer.sh/ && echo ""
 deploy:
   skip_cleanup: true
   provider: releases

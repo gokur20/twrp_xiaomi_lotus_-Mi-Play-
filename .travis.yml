@@ -21,9 +21,9 @@ before_script:
   - chmod a+rx ~/.bin/repo
 # install other necessary 
   - sudo apt-get install -y git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
-  - pip3 install twrpdtgen
   - sudo apt install cpio
   - sudo apt-get install openjdk-8-jdk
+  - sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
   # download the TWRP Compressed Source Files from PhantomZone54's Release
   # Uncomment & Use below line If Building for Lollipop-based Devices
   # - TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-5.1-norepo-20200222.tar.xz"

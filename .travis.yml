@@ -15,6 +15,8 @@ before_install:
 before_script:
   - cd $HOME && mkdir twrp
 # install repo
+  - apt-get update
+  - apt-get install repo
   - mkdir -p ~/.bin
   - PATH="${HOME}/.bin:${PATH}"
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
@@ -23,8 +25,6 @@ before_script:
 script:
 # if you have compiling problem try to uncomment  
 #  - export LC_ALL=C  
-#  To use the correct openjdk version
-  - jdk_switcher use openjdk8
   - cd $HOME/twrp/
   - repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-8.1
   - repo sync

@@ -1,5 +1,5 @@
 os: linux
-dist: focal
+dist: xenial
 language: generic
 sudo: required
 git:

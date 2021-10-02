@@ -15,7 +15,7 @@ before_install:
 before_script:
   - cd $HOME && mkdir twrp
 # install repo
-  - apt-get update
+#  - apt-get update
   - apt-get install repo
   - mkdir -p ~/.bin
   - PATH="${HOME}/.bin:${PATH}"

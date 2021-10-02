@@ -15,8 +15,8 @@ before_install:
 before_script:
   - cd $HOME && mkdir twrp
 # install repo
-#  - apt-get update
-  - apt-get install repo
+  - sudo apt-get update
+  - sudo apt-get install repo
   - mkdir -p ~/.bin
   - PATH="${HOME}/.bin:${PATH}"
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo

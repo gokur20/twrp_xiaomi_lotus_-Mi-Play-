@@ -9,7 +9,7 @@ addons:
     update:
       - true
 services:
-  - docker
+#  - docker
 before_install:
 #  - docker pull fr3akyphantom/droid-builder:latest
 before_script:
@@ -19,37 +19,13 @@ before_script:
   - PATH="${HOME}/.bin:${PATH}"
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
   - chmod a+rx ~/.bin/repo
-# install other necessary 
-  - sudo apt-get install -y git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
-  - sudo apt install cpio
-  - sudo apt-get install openjdk-8-jdk
-  - sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
-  # download the TWRP Compressed Source Files from PhantomZone54's Release
-  # Uncomment & Use below line If Building for Lollipop-based Devices
-  # - TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-5.1-norepo-20200222.tar.xz"
-  # Use below line If Building for Marshmallow-based Devices
-  #- TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-6.0-norepo-20200222.tar.xz"
-  # Uncomment & Use below line If Building for Nougat-based Devices
-  # - TWRP_SOURCE="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.3.1-20200222/MinimalOmniRecovery-twrp-7.1-norepo-20200222.tar.xz"
-  #- wget -q ${TWRP_SOURCE} -O $HOME/twrp.tar.xz
-  #- tar -xJf twrp.tar.xz --directory $HOME/twrp/ && rm twrp.tar.xz 
- # From Oreo something has changed, you need more files with different compression, see logs
-  #- TWRP_SOURCE1="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.aa"
-  #- TWRP_SOURCE2="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ab"
-  #- TWRP_SOURCE3="https://github.com/PhantomZone54/twrp_sources_norepo/releases/download/v3.4.0-20201030/MinimalOmniRecovery-twrp-8.1-norepo-20201030.tar.xz.ac"               
-  #- wget -q ${TWRP_SOURCE1} -O ./twrp.tar.xz.aa
-  #- wget -q ${TWRP_SOURCE2} -O ./twrp.tar.xz.ab
-  #- wget -q ${TWRP_SOURCE3} -O ./twrp.tar.xz.ac
-  #- cat twrp.tar.xz.a* > twrp.tar.xz
-  #- rm twrp.tar.xz.aa && rm twrp.tar.xz.ab && rm twrp.tar.xz.ac
-  #- tar -xJf twrp.tar.xz --directory $HOME/twrp/ 
-  #- rm twrp.tar.xz
+
 script:
 # if you have compiling problem try to uncomment  
 #  - export LC_ALL=C  
-# Replace your $$USERNAME$$, $$REPO_URL$$, $$BRAND$$, $$DEVICE$$
+#  To use the correct openjdk version
+  - jdk_switcher use openjdk8
   - cd $HOME/twrp/
-  - python3 -m twrpdtgen recovery.img
   - repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-8.1
   - repo sync
   - cd $HOME/twrp/ && git clone https://github.com/gokur20/twrp_xiaomi_Mi_Play.git device/xiaomi/lotus 
@@ -81,3 +57,19 @@ branches:
   except:
     - /^(?i:untagged)-.*$/
     - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+
+    © 2021 GitHub, Inc.
+    Terms
+    Privacy
+    Security
+    Status
+    Docs
+
+    Contact GitHub
+    Pricing
+    API
+    Training
+    Blog
+    About
+
+Loading complete

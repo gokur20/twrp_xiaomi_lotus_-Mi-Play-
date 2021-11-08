@@ -1,0 +1,38 @@
+on init
+    start hwservicemanager
+    start servicemanager
+
+#service hwservicemanager /sbin/hwservicemanager
+#    user root
+#    group root
+#    onrestart setprop hwservicemanager.ready false
+#    disabled
+#    seclabel u:r:recovery:s0
+
+#service servicemanager /sbin/servicemanager
+#    user root
+#    group root readproc
+#    disabled
+#    seclabel u:r:recovery:s0
+
+on property:ro.crypto.state=encrypted
+    start teei_daemon
+    start keymaster-3-0
+
+on property:twrp.decrypt.done=true
+    stop teei_daemon
+    stop keymaster-3-0
+
+service teei_daemon /sbin/teei_daemon
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
+
+service keymaster-3-0 /sbin/android.hardware.keymaster@3.0-service
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0

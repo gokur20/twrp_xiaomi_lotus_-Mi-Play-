@@ -79,3 +79,37 @@ TW_EXTRA_LANGUAGES := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_USE_TOOLBOX := true
+
+# Decryption support for /data
+TW_INCLUDE_CRYPTO := true
+#SHOUD I include?
+#TARGET_HW_DISK_ENCRYPTION := true
+
+# decrease default brightness
+TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
+TW_DEFAULT_BRIGHTNESS := 100
+
+# Debugging
+TARGET_USES_LOGD := true
+TWRP_INCLUDE_LOGCAT := true
+
+TW_EXCLUDE_NANO := false
+#TW_EXCLUDE_MTP := false
+#TW_MTP_DEVICE := /dev/usb-ffs/adb/ep2
+
+
+
+#added to test cactus decryption files
+#TW_RECOVERY_ADDITIONAL_RELINK_FILES += \
+ #  $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/hw/android.hardware.keymaster@3.0-impl.so \
+  # $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/hw/android.hardware.gatekeeper@1.0-impl.so \
+  # $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/hw/vendor.mediatek.hardware.keymaster_attestation@1.1-impl.so \
+  # $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/hw/keystore.mt6765.so \
+  # $(TARGET_OUT_VENDOR_EXECUTABLES)/hw/android.hardware.keymaster@3.0-service \
+  # $(TARGET_OUT_VENDOR_EXECUTABLES)/hw/android.hardware.gatekeeper@1.0-service \
+  # $(TARGET_OUT_VENDOR_EXECUTABLES)/hw/vendor.mediatek.hardware.keymaster_attestation@1.1-service \
+ #  $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/libkeymaster3device.so \
+ #  $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so
+
+# system.prop
+TARGET_SYSTEM_PROP := $(DEVICE_PATH)/system.prop

@@ -1,0 +1,10 @@
+persist.service.adb.enable=1
+persist.service.debuggable=1
+persist.sys.usb.config=mtp,adb
+ro.adb.secure=0
+
+#aggiunte per testare mtp da esempio blobs
+# USB MTP WHQL
+ro.sys.usb.mtp.whql.enable=0
+
+ro.sys.usb.storage.type=mtp

@@ -28,3 +28,4 @@ Then to sync up:
 Then to build:
 
 `. build/envsetup.sh; lunch omni_lotus-eng; mka recoveryimage`
+PROVOOROVO
